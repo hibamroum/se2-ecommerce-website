@@ -1,0 +1,44 @@
+{
+  "name": "se2-ecommerce-website",
+  "version": "1.0.0",
+  "description": "project created for practice on se2 course",
+  "keywords": [
+    "ecommerce",
+    "order",
+    "shop",
+    "buy"
+  ],
+  "homepage": "https://github.com/hibamroum/se2-ecommerce-website#readme",
+  "bugs": {
+    "url": "https://github.com/hibamroum/se2-ecommerce-website/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hibamroum/se2-ecommerce-website.git"
+  },
+  "license": "ISC",
+  "author": "Hiba M. Roumani",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm run build",
+    "prebuild": "npm run clean && npm run lint",
+    "build": "tsc",
+    "start": "node build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn src/index",
+    "clean": "rm -rf build",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "@types/node": "^24.3.1",
+    "eslint": "^9.34.0",
+    "globals": "^16.3.0",
+    "jiti": "^2.5.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.42.0"
+  }
+}
