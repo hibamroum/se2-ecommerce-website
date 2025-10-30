@@ -1,7 +1,8 @@
-import logger from "./util/logger";
-const testString = "from Hiba";
+import { parseCSV } from "./util/csv-parser";
 
-logger.info("Hello World!",{
-    orderId:"ORD-789",
-    amount:99.99
-});
+const pathToCSVFile = "/data/cake orders.csv";
+const main = async () => {
+  const parsedCakes = await parseCSV("./src/data/cake orders.csv");
+  console.log(parsedCakes);
+};
+main();
