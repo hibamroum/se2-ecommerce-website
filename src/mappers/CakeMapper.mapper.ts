@@ -34,4 +34,22 @@ export class CakeMapper implements IMapper<string[], Cake> {
       .setPackagingType(data[14] as CakePackagingType)
       .build();
   }
+  reverseMap(data: Cake): string[] {
+    return [
+      String(data.getType()),
+      String(data.getFlavor()),
+      String(data.getFilling()),
+      String(data.getSize()),
+      String(data.getLayers()),
+      String(data.getFrostingType),
+      String(data.getFrostingFlavor),
+      String(data.getDecorationType()),
+      String(data.getDecorationColor()),
+      String(data.getCustomMessage()),
+      String(data.getShape()),
+      String(data.getAllergies()),
+      String(data.getSpecialIngredients()),
+      String(data.getPackagingType()),
+    ];
+  }
 }

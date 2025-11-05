@@ -1,15 +1,9 @@
-import path from "path";
-import { parseCSV } from "./util/csv-parser";
-import { CakeMapper } from "./mappers/CakeMapper.mapper";
-import { OrderMapper } from "./mappers/OrderMapper.mapper";
+import { CakeOrderRepository } from "./repository/file/cake-order.repository";
+import config from "./config";
 
 const main = async () => {
-  const pathToCakeData = path.join(__dirname, "/data", "cake orders.csv");
-  const parsedData = await parseCSV(pathToCakeData);
-  const cakeMapper = new CakeMapper();
-  const mappedOrders = parsedData.map((row) =>
-    new OrderMapper(cakeMapper).map(row)
-  );
-  console.log(mappedOrders)
+  const repository = new CakeOrderRepository(config.fileStorage.csv.cakeData);
+  const savedData = await repository.readAll();
+  console.log(savedData);
 };
 main();

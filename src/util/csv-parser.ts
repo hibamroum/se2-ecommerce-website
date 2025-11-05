@@ -31,3 +31,45 @@ export const parseCSV = (filePath: string): Promise<string[][]> => {
     });
   });
 };
+
+export const writeCSV = (filePath: string, data: string[][]): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    try {
+      if (!Array.isArray(data) || data.length === 0) {
+        logger.error("Data must be non-empty array");
+        throw new Error("Data must be non-empty array");
+      }
+      const csvContent = data
+        .map((row) =>
+          row
+            .map((cell) => {
+              const cellStr = String(cell);
+              //handling special characters
+              if (
+                cellStr.includes(",") ||
+                cellStr.includes('"') ||
+                cellStr.includes("\r")
+              ) {
+                return `"${cellStr.replace(/"/g, '""')}`;//replace every single double quotations by 2 souble quotations
+              }
+              return cellStr;
+            })
+            .join(",")
+        )
+        .join("\n");
+      fs.writeFile(filePath, csvContent, "utf-8", (error) => {
+        if (error) {
+          logger.error(`Failed to write to CSV File`, { filePath, error });
+          reject(error);
+          throw new Error(`Failed to write to CSV File ${filePath}`);
+        }
+        logger.info(`Successfully wrote to CSV File ${filePath}`);
+        resolve()
+      });
+    } catch (error) {
+      logger.error(`Failed to write to CSV File`, { filePath, error });
+      reject(error);
+      throw new Error(`Failed to write to CSV File ${filePath}`);
+    }
+  });
+};
