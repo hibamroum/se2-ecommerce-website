@@ -1,7 +1,10 @@
 import fs, { ReadStream } from "fs";
-import logger from "./logger";
+import logger from "../logger";
 
-export const parseCSV = (filePath: string): Promise<string[][]> => {
+export const parseCSV = (
+  filePath: string,
+  includeHeaders: boolean = false
+): Promise<string[][]> => {
   return new Promise((resolve, reject) => {
     let parsedData: string[][] = [];
     const readStream: ReadStream = fs.createReadStream(filePath, {
@@ -19,6 +22,9 @@ export const parseCSV = (filePath: string): Promise<string[][]> => {
     });
 
     readStream.on("end", () => {
+      if (!includeHeaders) {
+        resolve(parsedData.slice(1));
+      }
       resolve(parsedData);
     });
 
@@ -40,31 +46,16 @@ export const writeCSV = (filePath: string, data: string[][]): Promise<void> => {
         throw new Error("Data must be non-empty array");
       }
       const csvContent = data
-        .map((row) =>
-          row
-            .map((cell) => {
-              const cellStr = String(cell);
-              //handling special characters
-              if (
-                cellStr.includes(",") ||
-                cellStr.includes('"') ||
-                cellStr.includes("\r")
-              ) {
-                return `"${cellStr.replace(/"/g, '""')}`;//replace every single double quotations by 2 souble quotations
-              }
-              return cellStr;
-            })
-            .join(",")
-        )
+        .map((row) => row.map((cell) => `"${cell}"`).join(","))
         .join("\n");
-      fs.writeFile(filePath, csvContent, "utf-8", (error) => {
+      fs.writeFile(filePath, csvContent, (error) => {
         if (error) {
           logger.error(`Failed to write to CSV File`, { filePath, error });
           reject(error);
           throw new Error(`Failed to write to CSV File ${filePath}`);
         }
         logger.info(`Successfully wrote to CSV File ${filePath}`);
-        resolve()
+        resolve();
       });
     } catch (error) {
       logger.error(`Failed to write to CSV File`, { filePath, error });

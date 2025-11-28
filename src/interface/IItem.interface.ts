@@ -4,4 +4,5 @@ export interface IItem {
 
 export enum ItemCategory {
   CAKE = "cake",
+  TOY = "toy",
 }

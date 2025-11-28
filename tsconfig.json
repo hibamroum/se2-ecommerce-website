@@ -13,7 +13,7 @@
     "esModuleInterop": true,//creates a compatibility layer/helpers that makes typescript treat module.exports AS IF it were a default export and make CommonJS and ES modules work together
 
     // For nodejs:
-    "types": ["node"],
+    "types": ["node","jest"],
 
     // Other Outputs
     "sourceMap": true,

@@ -1,8 +1,8 @@
 import path from "path";
-import { CakeMapper } from "../../mappers/CakeMapper.mapper";
-import { OrderMapper } from "../../mappers/OrderMapper.mapper";
+import { CakeMapper } from "../../mappers/cake-mapper.mapper";
+import { CSVOrderMapper } from "../../mappers/order-mapper.mapper";
 import { Order } from "../../model/order.model";
-import { parseCSV, writeCSV } from "../../util/csv-parser";
+import { parseCSV, writeCSV } from "../../util/parsers/csv-parser";
 import { OrderRepository } from "./order.repository";
 import { IOrder } from "../../interface/IOrder.interface";
 
@@ -16,7 +16,7 @@ export class CakeOrderRepository extends OrderRepository {
     const cakeData = await parseCSV(this.filePath);
     //Step 2: convert 2D strings to an object
     const cakeOrders = cakeData.map((cakeOrder) =>
-      new OrderMapper(this.cakeMapper).map(cakeOrder)
+      new CSVOrderMapper(this.cakeMapper).map(cakeOrder)
     );
     //Step 3: return list of objects
     return cakeOrders;
@@ -43,18 +43,10 @@ export class CakeOrderRepository extends OrderRepository {
       "Quantity",
     ];
     //Step 2: convert orders to 2D string
-    let stringOrdersArray: string[][] = [];
-
-    stringOrdersArray = orders.map((order) =>
-      new OrderMapper(this.cakeMapper).reverseMap(order)
+    const stringOrdersArray = orders.map((order) =>
+      new CSVOrderMapper(this.cakeMapper).reverseMap(order)
     );
     //Step 3: write to CSV
-    const pathToCakesFile = path.join(
-      __dirname,
-      "../",
-      "data",
-      "cake orders.csv"
-    );
-    return writeCSV(pathToCakesFile, [headers, ...stringOrdersArray]);
+    return writeCSV(this.filePath, [headers, ...stringOrdersArray]);
   }
 }
